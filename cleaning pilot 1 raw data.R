@@ -13,6 +13,8 @@ data <- read_spss("Pilot1RAWDATA.sav")
         #all answers are True-True-False-True regardless of condition
         #names for varaibles are: read1 read2 read3 read4 read1.0 read2.0 read3.0 read4.0
                                  #read1.1 read2.1 read3.1 read4.1
+    #4: if dempgraphics don't go in line with hypotheses requirements (i.e., participant not a member of the broader
+         #UK community, and participant is non heterosexual and/or non cisgender)
 
 
 data <- data %>%
@@ -21,12 +23,12 @@ data <- data %>%
 
 data <- data %>%
   group_by(condition) %>%
-  mutate(read1_c = ifelse(read1 == 1, 1, 0),                  #if T give 1 point, if not give 0
-         read2_c = ifelse(read2 == 1, 1, 0),                  #if T give 1 point, if not give 0
-         read3_c = ifelse(read3 == 2, 1, 0),                  #if F give 1 point, if not give 0
-         read4_c = ifelse(read4 == 1, 1, 0),                  #if T give 1 point, if not give 0
-         rscore_c = read1_c + read2_c + read3_c + read4_c,    #adding scores for reading comprehension
-         read1_l = ifelse(read1.0 == 1, 1, 0),                
+  mutate(read1_c = ifelse(read1 == 1, 1, 0),                  #if answer for Q1 is T, give 1 point, if not give 0
+         read2_c = ifelse(read2 == 1, 1, 0),                  #if answer for Q2 is T, give 1 point, if not give 0
+         read3_c = ifelse(read3 == 2, 1, 0),                  #if answer for Q3 is F, give 1 point, if not give 0
+         read4_c = ifelse(read4 == 1, 1, 0),                  #if answer for Q4 is T, give 1 point, if not give 0
+         rscore_c = read1_c + read2_c + read3_c + read4_c,    #adding reading comprehension scores of control condition
+         read1_l = ifelse(read1.0 == 1, 1, 0),                #repeat procedure for the other conditions              
          read2_l = ifelse(read2.0 == 1, 1,0),
          read3_l = ifelse(read3.0 == 2, 1, 0),
          read4_l = ifelse(read4.0 == 1, 1, 0),
@@ -39,12 +41,17 @@ data <- data %>%
          ) %>%
   ungroup()
 
-###LEFT HERE. NUMBER OF ROWS LEFT DON'T MATCH CLEANED SPSS DATA
-dat1 <- data %>%
-  filter(rscore_c > 2 | is.na(rscore_c), 
-         rscore_l > 2 | is.na(rscore_l),
-         rscore_h > 2 | is.na(rscore_h))
+data <- data %>%
+  filter(rscore_c > 2 | is.na(rscore_c),       #you need to include missing values for the summation of scores
+         rscore_l > 2 | is.na(rscore_l),       #because participants in the high contidion, for example, will have
+         rscore_h > 2 | is.na(rscore_h))       #their scores in the control condition (rscore_c) as NA since they
+                                               #never completed these questions
 
+all(data$sex == data$gender)                   #command yields TRUE meaning all participants are cisgender, no need to
+                                               #filter by whether their sex matches their gender
+
+data <- data %>%
+  filter(sexorien == 1 | generation)
 
 
 
@@ -60,13 +67,14 @@ data <- reverse.code(keys = c("soiatt_3", "fematt_3"), items = data, mini = 1, m
 data <- data %>%
   mutate(soiatt_3R = 10-soiatt_3, fematt_3R = 10-fematt_3 )
 
-#Participant SOI
-
-data <- data
+#Adding participant SOI, perceived female SOI, sexual morality, self-religiosity, other-religiosity)
 
 data <- data %>%
   mutate(soibhv = (soibhv_1 + soibhv_2 + soibhv_3)/3,
-         soiatt = (soiatt_1 + soiatt_2 + soiatt_3)/3,
-         soides = )
+         soiatt = (soiatt_1 + soiatt_2 + soiatt_3R)/3,
+         soides = (soides_1 + soides_2 + soides_3)/3,
+         fembhv = (fembhvr1 + fembhvr2 + fembhvr3)/3,
+         fematt = (fematt_1 + fematt_2 + fematt_3R)/3,
+         femdes = (femdes_1 + femdes_2 + femdes_3)/3)
 
 

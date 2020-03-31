@@ -51,7 +51,7 @@ all(data$sex == data$gender)                   #command yields TRUE meaning all 
                                                #filter by whether their sex matches their gender
 
 data <- data %>%
-  filter(sexorien == 1 | generation)
+  filter(sexorien == 1)                       #hetero participants only, for immigration, we had no internationals
 
 
 

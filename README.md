@@ -33,3 +33,4 @@ Exclusion criteria included:
    sexual minorities is important, many of our hypotheses were exploratory in nature, and we thought it best to first explore these with
    regards to whether effects are present in heterosexual cisgender participants before hypothesising whether any significant effects would
    also be present in sexual and gender minorities. 
+6) Having a participant SOI score or perceived female SOI score of +/- 3 SDS from the mean

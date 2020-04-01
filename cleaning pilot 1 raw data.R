@@ -13,8 +13,9 @@ data <- read_spss("Pilot1RAWDATA.sav")
         #all answers are True-True-False-True regardless of condition
         #names for varaibles are: read1 read2 read3 read4 read1.0 read2.0 read3.0 read4.0
                                  #read1.1 read2.1 read3.1 read4.1
-    #4: if dempgraphics don't go in line with hypotheses requirements (i.e., participant not a member of the broader
+    #4: if demographics don't go in line with hypotheses requirements (i.e., participant not a member of the broader
          #UK community, and participant is non heterosexual and/or non cisgender)
+    #5: if own SOI and female SOI are +/-3 SDs from the mean
 
 
 all(data$sex == data$gender)                   #command yields TRUE meaning all participants are cisgender, no need to

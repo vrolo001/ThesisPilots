@@ -15,7 +15,7 @@ data <- read_spss("Pilot1RAWDATA.sav")
                                  #read1.1 read2.1 read3.1 read4.1
     #4: if demographics don't go in line with hypotheses requirements (i.e., participant not a member of the broader
          #UK community, and participant is non heterosexual and/or non cisgender)
-    #5: if own SOI and female SOI are +/-3 SDs from the mean
+    #5: if own SOI and female SOI are +/-3 SDs from the mean after computing constructs
 
 
 all(data$sex == data$gender)                   #command yields TRUE meaning all participants are cisgender, no need to
@@ -79,25 +79,26 @@ data <- data %>%
 
 #Scoring constructs
 
-data <- data %>%
-  mutate(soibhv = (soibhv_1 + soibhv_2 + soibhv_3)/3,
-         soiatt = (soiatt_1 + soiatt_2 + soiatt_3R)/3,
-         soides = (soides_1 + soides_2 + soides_3)/3,
-         soitot = (soibhv + soiatt + soides)/3,
-         fembhv = (fembhvr1 + fembhvr2 + fembhvr3)/3,
-         fematt = (fematt_1 + fematt_2 + fematt_3R)/3,
-         femdes = (femdes_1 + femdes_2 + femdes_3)/3,
-         femtot = (fembhv + fematt + femdes)/3,
-         unfaith = (sexmoral_1 + sexmoral_8 + sexmoral_15 + sexmoral_22 + sexmoral_29 + sexmoral_36)/6,
-         stm    = (sexmoral_2 + sexmoral_9  + sexmoral_16 + sexmoral_23 + sexmoral_30 + sexmoral_37)/6,
-         coerce = (sexmoral_3 + sexmoral_10 + sexmoral_17 + sexmoral_24 + sexmoral_31)/5,
-         outgrp = (sexmoral_4 + sexmoral_11 + sexmoral_18 + sexmoral_25 + sexmoral_32)/5,
-         romant = (sexmoral_5 + sexmoral_12 + sexmoral_19 + sexmoral_26 + sexmoral_33 + sexmoral_38)/6,
-         homo   = (sexmoral_6 + sexmoral_13 + sexmoral_20 + sexmoral_27 + sexmoral_34)/5,
-         atypic = (sexmoral_7 + sexmoral_14 + sexmoral_21 + sexmoral_28 + sexmoral_35)/5,
-         relself = (intrrel_1 + intrrel_2 + intrrel_3 + intrrel_4 + intrrel_5 + intrrel_6)/6,
-         relother = (otherrel_1 + otherrel_2 + otherrel_3 + otherrel_4 + otherrel_5)/5)
-
+data$soibhv <- rowMeans(data[, 22:24], na.rm = TRUE)
+data$soiatt <- rowMeans(data[, c(25:26, 200)], na.rm = TRUE)
+data$soides <- rowMeans(data[, 28:30], na.rm = TRUE)
+data$soitot <- rowMeans(data[, c(22:26, 200, 28:30)], na.rm = TRUE)
+data$fembhv <- rowMeans(data[, 94:96], na.rm = TRUE)
+data$fematt <- rowMeans(data[, c(97:98, 201)], na.rm = TRUE)
+data$femdes <- rowMeans(data[, 100:102], na.rm = TRUE)
+data$femtot <- rowMeans(data[, c(94:98, 201, 100:102)], na.rm = TRUE)
+data$unfaith <- rowMeans(data[, c(103, 110, 117, 124, 131, 138)], na.rm = TRUE)
+data$stm    <- rowMeans(data[, c(104, 111, 118, 125, 132, 139)], na.rm = TRUE)
+data$coerce <- rowMeans(data[, c(105, 112, 119, 126, 133)], na.rm = TRUE)
+data$outgrp <- rowMeans(data[, c(106, 113, 120, 127, 134)], na.rm = TRUE)
+data$romant <- rowMeans(data[, c(107, 114, 121, 128, 135, 140)], na.rm = TRUE)
+data$homo   <- rowMeans(data[, c(108, 115, 122, 129, 136)], na.rm = TRUE)
+data$atypic <- rowMeans(data[, c(109, 116, 123, 130, 137)], na.rm = TRUE)
+data$relself <- rowMeans(data[, 146:151], na.rm = TRUE)
+data$othrrel <- rowMeans(data[, 141:145], na.rm = TRUE)
+  
 ### Removing outliers
 
 
+### Save new data file
+write.csv(data, "Pilot1 Clean Data R")
